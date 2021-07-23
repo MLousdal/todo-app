@@ -19,8 +19,14 @@ function toggleTheme() {
 // TODO app (folowed a tutorial from: https://freshman.tech/todo-list/)
 
 // This is the array that will hold the todo list items
-let todoItems = [0, 1, 2, 3, 4, 5];
-const list = document.querySelector('.todo-container');
+let todoItems = [
+  {text:"Complete online JavaScript Course", checked: true, id: 0},
+  {text:"Jog around the park", checked: false, id: 1},
+  {text:"10 minutes meditation", checked: false, id: 2},
+  {text:"Read for 1 hour", checked: false, id: 3},
+  {text:"Pickup groceries", checked: false, id: 4},
+  {text:"Complete Todo App on frontendmentor", checked: false, id: 5},
+];
 
 // This function will create a new todo object based on the
 // text that was entered in the text input, and push it into
@@ -33,6 +39,31 @@ function addTodo(text) {
   };
 
   todoItems.push(todo);
+  renderTodo(todo);
+}
+
+function toggleDone(key) {
+  // findIndex is an array method that returns the position of an element
+  // in the array.
+  const index = todoItems.findIndex(item => item.id === Number(key));
+  // Locate the todo item in the todoItems array and set its checked
+  // property to the opposite. That means, `true` will become `false` and vice
+  // versa.
+  todoItems[index].checked = !todoItems[index].checked;
+  renderTodo(todoItems[index]);
+}
+
+function deleteTodo(key) {
+  // find the corresponding todo object in the todoItems array
+  const index = todoItems.findIndex(item => item.id === Number(key));
+  // Create a new object with properties of the current todo item
+  // and a `deleted` property which is set to true
+  const todo = {
+    deleted: true,
+    ...todoItems[index]
+  };
+  // remove the todo item from the array by filtering it out
+  todoItems = todoItems.filter(item => item.id !== Number(key));
   renderTodo(todo);
 }
 
@@ -56,27 +87,39 @@ form.addEventListener('submit', event => {
 
 function renderTodo(todo) {
   const item = document.querySelector(`[data-key='${todo.id}']`);
+  let arrCheckedTodos = [];
 
-  // add this if block
+  todoItems.forEach(el => {
+    if (el.checked == true) {
+      arrCheckedTodos.push(el);
+    }
+  });
+
   if (todo.deleted) {
     // remove the item from the DOM
     item.remove();
+    document.querySelector("#left").innerHTML = `
+    ${todoItems.length - arrCheckedTodos.length} items left
+    `
     return
   }
 
   const isChecked = todo.checked ? 'done': '';
   const node = document.createElement("li");
-  node.setAttribute('class', `between-flex todo-item ${isChecked}`);
+  node.setAttribute('class', `between-flex todo-item`);
   node.setAttribute('data-key', todo.id);
   node.innerHTML = `
     <label class="checkbox" for="${todo.id}">
     <input type="checkbox" id="${todo.id}">
-    <span class="checkmark"></span>
+    <span class="checkmark ${isChecked}"></span>
     <span class="todo-text">${todo.text}</span>
     </label>
-    <button type="button" aria-label="delete item" class="delete"><img src="assets/images/icon-cross.svg" alt=""></button>
+    <button type="button" aria-label="delete item" class="delete"></button>
   `;
 
+  document.querySelector("#left").innerHTML = `
+  ${todoItems.length - arrCheckedTodos.length} items left
+  `
   if (item) {
     list.replaceChild(node, item);
   } else {
@@ -85,47 +128,38 @@ function renderTodo(todo) {
 }
 
 // Add a click event listener to the list and its children
-list.addEventListener('click', event => {
-  if (event.target.classList.contains('checkbox')) {
-    const itemKey = event.target.parentElement.dataset.key;
-    toggleDone(itemKey);
-  }
-});
-
-function toggleDone(key) {
-  // findIndex is an array method that returns the position of an element
-  // in the array.
-  const index = todoItems.findIndex(item => item.id === Number(key));
-  // Locate the todo item in the todoItems array and set its checked
-  // property to the opposite. That means, `true` will become `false` and vice
-  // versa.
-  todoItems[index].checked = !todoItems[index].checked;
-  renderTodo(todoItems[index]);
-}
+const list = document.querySelector('.todo-container');
+const checkbox = document.querySelector(".checkbox");
 
 list.addEventListener('click', event => {
-  if (event.target.classList.contains('checkbox')) {
-    const itemKey = event.target.parentElement.dataset.key;
+  if (event.target.classList.contains('checkmark')) {
+    const itemKey = event.target.parentElement.parentElement.dataset.key;
     toggleDone(itemKey);
+    checkbox.classList.toggle("checked");
   }
 
-  // add this `if` block
+  if (event.target.classList.contains('todo-text')) {
+    const itemKey = event.target.parentElement.parentElement.dataset.key;
+    toggleDone(itemKey);
+    checkbox.classList.toggle("checked");
+  }
+
   if (event.target.classList.contains('delete')) {
     const itemKey = event.target.parentElement.dataset.key;
     deleteTodo(itemKey);
   }
 });
 
-function deleteTodo(key) {
-  // find the corresponding todo object in the todoItems array
-  const index = todoItems.findIndex(item => item.id === Number(key));
-  // Create a new object with properties of the current todo item
-  // and a `deleted` property which is set to true
-  const todo = {
-    deleted: true,
-    ...todoItems[index]
-  };
-  // remove the todo item from the array by filtering it out
-  todoItems = todoItems.filter(item => item.id !== Number(key));
-  renderTodo(todo);
+
+// Clear all checked off todo items
+const clearEl = document.querySelector('#clear');
+clearEl.addEventListener("click", clear);
+
+function clear() {
+  todoItems.forEach(el => {
+    if (el.checked == true) {
+      console.log(el.id)
+      deleteTodo(el.id);
+    }
+  });
 }

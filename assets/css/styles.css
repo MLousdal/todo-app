@@ -35,17 +35,20 @@
 
 .theme-light {
   --font-color: hsl(235, 19%, 35%);
+  --font-color-disabled: hsl(236, 9%, 61%);
   --background-color: hsl(0, 0%, 98%);
   --todo-background: hsl(0, 0%, 100%);
   --todo-item-border: rgba(72, 75, 106, 0.1);
   --gray-blue: hsl(234, 39%, 85%);
-  --gray-blue-hover: hsl(234, 39%, 85%);
+  --gray-blue-hover: hsl(236, 9%, 61%);
   --box-shadow: hsl(233, 11%, 84%);
   --background: url("../images/bg-desktop-light.jpg");
+  --background-mobile: url("../images/bg-mobile-light.jpg");
 }
 
 .theme-dark {
   --font-color: hsl(234, 39%, 85%);
+  --font-color-disabled: hsl(233, 14%, 35%);
   --background-color: hsl(235, 21%, 11%);
   --todo-background: hsl(235, 24%, 19%);
   --todo-item-border: rgba(72, 75, 106, 0.1);
@@ -53,6 +56,7 @@
   --gray-blue-hover: hsl(236, 33%, 92%);
   --box-shadow: hsl(235, 21%, 11%);
   --background: url("../images/bg-desktop-dark.jpg");
+  --background-mobile: url("../images/bg-mobile-dark.jpg");
 }
 
 html {
@@ -156,6 +160,7 @@ header {
   height: 100%;
   position: absolute;
   inset: 0;
+  border-radius: 5px;
   box-shadow: 0px 10px 50px 10px var(--box-shadow);
   z-index: -1;
 }
@@ -178,6 +183,7 @@ header {
 }
 
 .todo-text {
+  padding: 1em;
 }
 
 .todo-create {
@@ -189,10 +195,12 @@ header {
   margin-left: 4em;
   width: calc(100% - 4em);
   height: 1em;
+  padding: 0.2em;
 }
 
 .todo-create input[type="text"]:focus {
   font-weight: 700;
+  outline: 1px;
 }
 
 .delete {
@@ -213,10 +221,18 @@ header {
 .footer-container {
   border-radius: 0 0 5px 5px;
   position: relative;
+  display: grid;
+  grid-template-columns: 13ch auto 13ch;
 }
 
 #left {
   width: 13ch;
+}
+
+#clear {
+}
+
+.toggle-list {
 }
 
 button, input {
@@ -355,7 +371,7 @@ button, input {
 .checkbox {
   display: block;
   position: relative;
-  padding-left: 3em;
+  padding-left: 2em;
   cursor: pointer;
   user-select: none;
 }
@@ -399,7 +415,7 @@ display: none;
 } 
 
 /* When the checkbox is checked, add a blue background */
-.checkbox input:checked ~ .checkmark {
+.done.checkmark, .checkbox input:checked ~ .checkmark {
   background: linear-gradient(to right bottom, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
   border: none;
   top: 2px;
@@ -407,23 +423,24 @@ display: none;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
+.checkmark::after {
   content: "";
   position: absolute;
   display: none;
 }
 
 /* Show the checkmark when checked */
-.checkbox input:checked ~ .checkmark:after {
+.done.checkmark::after, .checkbox input:checked ~ .checkmark::after {
   display: block;
 }
 
-.checkbox input:checked ~ .todo-text {
+.done ~ .todo-text, .checkbox input:checked ~ .todo-text {
   text-decoration: line-through;
+  color: var(--font-color-disabled);
 }
 
 /* Style the checkmark/indicator */
-.checkbox .checkmark:after {
+.checkbox .checkmark::after, .checkbox input:checked ~ .checkmark::after {
   left: calc(50% - 0.4em);
   top: calc(50% - 0.4em);
   width: 0.8em;
@@ -441,6 +458,59 @@ display: none;
     ===============
 */
 
-@media only screen and (max-width: 1262px) {
-
+@media only screen and (max-width: 700px) {
+  body {
+    background: var(--background-mobile) no-repeat;
+    background-size: contain;
+    font-size: 87.5%;
+    background-color: var(--background-color);
+  }
+  main {
+    top: 2em;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  header {
+    margin-bottom: 1em;
+  }
+  .todo-item, .footer-container {
+    padding: 0.8em;
+  }
+  .todo-text {
+    padding: 0.5em;
+  }
+  .delete, .checkmark, .checkbox::before, .delete {
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+  }
+  .checkbox::before {
+    top: 2px;
+    left: 2px;
+  }
+  .checkbox .checkmark::after, .checkbox input:checked ~ .checkmark::after {
+    left: calc(50% - 0.3em);
+    top: calc(50% - 0.3em);
+    width: 0.6em;
+    height: 0.6em;
+  }
+  .footer-container {
+    grid-template-columns: repeat(2, 50%);
+    row-gap: 1.5em;
+  }
+  #left {
+    order: 1;
+  }
+  #clear {
+    text-align: end;
+    order: 2;
+  }
+  .toggle-list {
+    order: 3;
+    grid-column: span 2;
+  }
+  .drNdr {
+    margin-top: 2em;
+  }
 }
