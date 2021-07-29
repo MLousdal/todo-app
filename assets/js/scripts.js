@@ -20,12 +20,12 @@ function toggleTheme() {
 
 // This is the array that will hold the todo list items
 let todoItems = [
-  {text:"Complete online JavaScript Course", checked: true, id: 0},
-  {text:"Jog around the park", checked: false, id: 1},
-  {text:"10 minutes meditation", checked: false, id: 2},
-  {text:"Read for 1 hour", checked: false, id: 3},
-  {text:"Pickup groceries", checked: false, id: 4},
-  {text:"Complete Todo App on frontendmentor", checked: false, id: 5},
+  {text:"Complete online JavaScript Course", checked: true, hidden: false, id: 0},
+  {text:"Jog around the park", checked: false, hidden: false, id: 1},
+  {text:"10 minutes meditation", checked: false, hidden: false, id: 2},
+  {text:"Read for 1 hour", checked: false, hidden: false, id: 3},
+  {text:"Pickup groceries", checked: false, hidden: false, id: 4},
+  {text:"Complete Todo App on frontendmentor", checked: false, hidden: false, id: 5},
 ];
 
 // This function will create a new todo object based on the
@@ -35,6 +35,7 @@ function addTodo(text) {
   const todo = {
     text,
     checked: false,
+    hidden: false,
     id: Date.now(),
   };
 
@@ -104,6 +105,15 @@ function renderTodo(todo) {
     return
   }
 
+  if (todo.hidden == true) {
+    // hide the item from the DOM
+    item.style.display = "none";
+    // Remember to return otherwise it will be drawn by some of the next code!
+    return 
+  } else {
+    item.style.display = "";
+  }
+
   const isChecked = todo.checked ? 'done': '';
   const node = document.createElement("li");
   node.setAttribute('class', `between-flex todo-item`);
@@ -151,14 +161,72 @@ list.addEventListener('click', event => {
 });
 
 
-// Clear all checked off todo items
-const clearEl = document.querySelector('#clear');
-clearEl.addEventListener("click", clear);
+// Add a click event listener to the footer and its children
+const footer = document.querySelector(".footer-container");
+const allEl = document.querySelector("#all");
+const activeEl = document.querySelector("#active");
+const completedEl = document.querySelector("#completed");
+
+
+footer.addEventListener("click", event => {
+  if (event.target == allEl) {
+    all();
+    event.target.classList.add("active");
+    activeEl.classList.remove("active");
+    completedEl.classList.remove("active")
+  }
+  if (event.target == activeEl) {
+    active();
+    event.target.classList.add("active");
+    allEl.classList.remove("active");
+    completedEl.classList.remove("active")
+  }
+  if (event.target == completedEl) {
+    completed();
+    event.target.classList.add("active");
+    activeEl.classList.remove("active");
+    allEl.classList.remove("active")
+  }
+  if (event.target == document.querySelector("#clear")) {
+    clear();
+  }
+});
+
+function all() {
+  todoItems.forEach(el => {
+    if (el.hidden == true) {
+      el.hidden = false;
+    }
+    renderTodo(todoItems[todoItems.indexOf(el)]);
+  });
+}
+
+function active() {
+  todoItems.forEach(el => {
+    if (el.checked == true) {
+      el.hidden = true;
+    } else {
+      el.hidden = false;
+    }
+    renderTodo(todoItems[todoItems.indexOf(el)]);
+  });
+}
+
+function completed() {
+  todoItems.forEach(el => {
+    if (el.checked == true) {
+      el.hidden = false;
+
+    } else {
+      el.hidden = true;
+    }
+    renderTodo(todoItems[todoItems.indexOf(el)]);
+  });
+}
 
 function clear() {
   todoItems.forEach(el => {
     if (el.checked == true) {
-      console.log(el.id)
       deleteTodo(el.id);
     }
   });
