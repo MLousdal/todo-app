@@ -110,8 +110,6 @@ function renderTodo(todo) {
     item.style.display = "none";
     // Remember to return otherwise it will be drawn by some of the next code!
     return 
-  } else {
-    item.style.display = "";
   }
 
   const isChecked = todo.checked ? 'done': '';
