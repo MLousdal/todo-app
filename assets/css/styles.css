@@ -5,25 +5,14 @@
     1. Global styles
     2. Typography
     3. Layout
-        3.1 Header
-        3.2 Section
-        3.3 Article
-        3.4 Form
-        3.5 Table
-        3.6 Summary
-        3.7 Footer
-        3.8 Picture
-        3.9 Break line
-        3.10 Misc. Positions
+        3.1 Main
+        3.2 Header
+        3.3 Todo-container
+        3.4 Footer-container
+        3.5 Misc. Positions
     4. Components
-        4.1 Nav-bar
-        4.2 Grid
-        4.3 Switch
-        4.4 Slider
-        4.5 CTA
-        4.6 To top button
-        4.7 Fancy radio btns
-        4.8 Icons
+        4.1 Icons
+        4.2 Checkbox
     5. Media quries
 */
 
@@ -130,6 +119,7 @@ h1 {
     =============
 */
 
+/* ----- 3.1 Main ----- */
 main {
   width: 90%;
   max-width: 700px;
@@ -138,12 +128,14 @@ main {
   top: 4em;
 }
 
+/* ----- 3.2 Header ----- */
+
 header {
   align-items: center;
   margin-bottom: 2em;
 }
 
-/* ----- Todo-container ----- */
+/* ----- 3.3 Todo-container ----- */
 
 .todo-container {
   background-color: none;
@@ -216,7 +208,7 @@ header {
   display: block;
 }
 
-/* ----- Footer-container ----- */
+/* ----- 3.4 Footer-container ----- */
 
 .footer-container {
   border-radius: 0 0 5px 5px;
@@ -227,12 +219,6 @@ header {
 
 #left {
   width: 13ch;
-}
-
-#clear {
-}
-
-.toggle-list {
 }
 
 button, input {
@@ -266,7 +252,7 @@ button, input {
   margin-top: 4em;
 }
 
-/* ----- 3.10 Misc. Positions ----- */
+/* ----- 3.5 Misc. Positions ----- */
 
 .center-flex {
   display: flex;
@@ -365,7 +351,7 @@ button, input {
   height: 100%;
 }
 
-/* ----- Checkbox ----- */
+/* ----- 4.2 Checkbox ----- */
 
 /* The container */
 .checkbox {
