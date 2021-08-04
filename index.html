@@ -20,7 +20,7 @@
     .attribution a { color: hsl(228, 45%, 44%); }
   </style>
 </head>
-<body class="theme-light">
+<body class="theme-light" onload="all()">
   <main>
     <header class="between-flex align-center">
       <h1>TODO</h1>
@@ -38,54 +38,7 @@
         <input type="text" placeholder="Create a new todo..." class="todo-input">
       </form>
       <ul class="todo-container">
-        <li class="between-flex todo-item" data-key="0">
-          <label class="checkbox" for="0">
-            <input type="checkbox">
-            <span class="checkmark done"></span>
-            <span class="todo-text">Complete online JavaScript Course</span>
-          </label>
-          <button type="button" aria-label="delete item" class="delete"></button>
-        </li>
-        <li class="between-flex todo-item" data-key="1">
-          <label class="checkbox" for="1">
-            <input type="checkbox">
-            <span class="checkmark"></span>
-            <span class="todo-text">Jog around the park</span>
-          </label>
-          <button type="button" aria-label="delete item" class="delete"></button>
-        </li>
-        <li class="between-flex todo-item" data-key="2">
-          <label class="checkbox" for="2">
-            <input type="checkbox">
-            <span class="checkmark"></span>
-            <span class="todo-text">10 minutes meditation</span>
-          </label>
-          <button type="button" aria-label="delete item" class="delete"></button>
-        </li>
-        <li class="between-flex todo-item" data-key="3">
-          <label class="checkbox" for="3">
-            <input type="checkbox">
-            <span class="checkmark"></span>
-            <span class="todo-text">Read for 1 hour</span>
-          </label>
-          <button type="button" aria-label="delete item" class="delete"></button>
-        </li>
-        <li class="between-flex todo-item" data-key="4">
-          <label class="checkbox" for="4">
-            <input type="checkbox">
-            <span class="checkmark"></span>
-            <span class="todo-text">Pickup groceries</span>
-          </label>
-          <button type="button" aria-label="delete item" class="delete"></button>
-        </li>
-        <li class="between-flex todo-item" data-key="5">
-          <label class="checkbox" for="5">
-            <input type="checkbox">
-            <span class="checkmark"></span>
-            <span class="todo-text">Complete Todo App on frontendmentor</span>
-          </label>
-          <button type="button" aria-label="delete item" class="delete"></button>
-        </li>
+
       </ul>
       <section class="footer-container grayBlue">
         <span id="left">5 items left</span>
