@@ -233,3 +233,60 @@ function clear() {
     }
   });
 }
+
+// Drag and drop goes here! Followed this tutorial: https://code-boxx.com/drag-drop-sortable-list-javascript/
+
+window.addEventListener("load", slist(".todo-container"));
+
+function slist (target) {
+  // (A) GET LIST
+  target = document.querySelector(target);
+
+  // (B) MAKE ITEMS DRAGGABLE + SORTABLE
+  const items = target.querySelectorAll(".todo-item"), current = null;
+
+  items.forEach(todo => {
+    // (B1) ATTACH DRAGGABLE
+    todo.draggable = true;
+
+    // (B2) DRAG START - YELLOW HIGHLIGHT DROPZONES
+    todo.addEventListener("dragstart", function () {
+      current = this;
+    });
+    
+    // (B3) DRAG ENTER - RED HIGHLIGHT DROPZONE
+    todo.addEventListener("dragenter", function () {
+    });
+
+    // (B4) DRAG LEAVE - REMOVE RED HIGHLIGHT
+    todo.addEventListener("dragleave", function () {
+    });
+
+    // (B5) DRAG END - REMOVE ALL HIGHLIGHTS
+    todo.addEventListener("dragend", function () {
+
+    });
+  
+    // (B6) DRAG OVER - PREVENT THE DEFAULT "DROP", SO WE CAN DO OUR OWN
+    todo.addEventListener("dragover", function (evt) {
+      evt.preventDefault();
+    });
+  
+    // (B7) ON DROP - DO SOMETHING
+    todo.addEventListener("drop", function (evt) {
+      evt.preventDefault();
+      if (this != current) {
+        let currentpos = 0, droppedpos = 0;
+        items.forEach(it => {
+          if (current == items[it]) { currentpos = it; }
+          if (this == items[it]) { droppedpos = it; }
+        });
+        if (currentpos < droppedpos) {
+          this.parentNode.insertBefore(current, this.nextSibling);
+        } else {
+          this.parentNode.insertBefore(current, this);
+        }
+      }
+    });
+  });
+}
