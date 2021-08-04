@@ -238,12 +238,43 @@ function clear() {
 
 window.addEventListener("load", slist(".todo-container"));
 
+let arrayTodos = Array.from(document.querySelectorAll(".todo-item"));
+let total = arrayTodos.length;
+let rowSize = 100;
+
+function changeIndex(item, to) {
+    
+  // Change position in array
+  arrayMove(arrayTodos, item.index, to);
+    
+  // Change element's position in DOM. Not always necessary. Just showing how.
+  if (to === total - 1) {
+    list.appendChild(item.element);    
+  } else {    
+    var i = item.index > to ? to : to + 1;
+    list.insertBefore(item.element, list.children[i]);
+  }    
+    
+  // Set index for each sortable
+  arrayTodos.forEach((sortable, index) => sortable.setIndex(index));
+}
+
 function slist (target) {
   // (A) GET LIST
   target = document.querySelector(target);
 
   // (B) MAKE ITEMS DRAGGABLE + SORTABLE
-  const items = target.querySelectorAll(".todo-item"), current = null;
+  const items = target.querySelectorAll(".todo-item");
+  const animation = {
+    boxShadow: "0px 10px 50px 10px var(--box-shadow)",
+    force3D: true,
+    transform: "scale(1.1)",
+  };
+  const animationOff = {
+    boxShadow: "0px 0px 0px 0px var(--box-shadow)",
+    force3D: false,
+    transform: "scale(1)",
+  };
 
   items.forEach(todo => {
     // (B1) ATTACH DRAGGABLE
@@ -251,42 +282,35 @@ function slist (target) {
 
     // (B2) DRAG START - YELLOW HIGHLIGHT DROPZONES
     todo.addEventListener("dragstart", function () {
-      current = this;
-    });
+      Object.assign(this.style, animation);
+      let index = clamp(Math.round(this.y / rowSize), 0, total - 1);
     
-    // (B3) DRAG ENTER - RED HIGHLIGHT DROPZONE
-    todo.addEventListener("dragenter", function () {
+      if (index !== arrayTodos.index) {
+        changeIndex(arrayTodos, index);
+      }
     });
-
-    // (B4) DRAG LEAVE - REMOVE RED HIGHLIGHT
-    todo.addEventListener("dragleave", function () {
-    });
-
     // (B5) DRAG END - REMOVE ALL HIGHLIGHTS
     todo.addEventListener("dragend", function () {
-
+      Object.assign(this.style, animationOff);
     });
-  
     // (B6) DRAG OVER - PREVENT THE DEFAULT "DROP", SO WE CAN DO OUR OWN
     todo.addEventListener("dragover", function (evt) {
       evt.preventDefault();
     });
-  
     // (B7) ON DROP - DO SOMETHING
     todo.addEventListener("drop", function (evt) {
       evt.preventDefault();
-      if (this != current) {
-        let currentpos = 0, droppedpos = 0;
-        items.forEach(it => {
-          if (current == items[it]) { currentpos = it; }
-          if (this == items[it]) { droppedpos = it; }
-        });
-        if (currentpos < droppedpos) {
-          this.parentNode.insertBefore(current, this.nextSibling);
-        } else {
-          this.parentNode.insertBefore(current, this);
-        }
-      }
+      
     });
   });
+}
+
+// Changes an elements's position in array
+function arrayMove(array, from, to) {
+  array.splice(to, 0, array.splice(from, 1)[0]);
+}
+
+// Clamps a value to a min/max
+function clamp(value, a, b) {
+  return value < a ? a : (value > b ? b : value);
 }
