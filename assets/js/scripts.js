@@ -7,16 +7,16 @@ const toLight = document.querySelector("#toLight");
 function toggleTheme() {
   if (body.classList.contains("theme-light")) {
     body.classList.replace("theme-light", "theme-dark");
-    toDark.classList.remove("hide");
-    toLight.classList.add("hide");
+    toDark.classList.toggle("hide");
+    toLight.classList.toggle("hide");
   } else {
     body.classList.replace("theme-dark", "theme-light");
-    toLight.classList.remove("hide");
-    toDark.classList.add("hide");
+    toLight.classList.toggle("hide");
+    toDark.classList.toggle("hide");
   }
 }
 
-// TODO app (folowed a tutorial from: https://freshman.tech/todo-list/)
+// TODO app (folowed a tutorial from: https://freshman.tech/todo-list/
 
 // This is the array that will hold the todo list items
 let todoItems = [
@@ -116,6 +116,7 @@ function renderTodo(todo) {
   const node = document.createElement("li");
   node.setAttribute('class', `between-flex todo-item`);
   node.setAttribute('data-key', todo.id);
+  node.draggable = true;
   node.innerHTML = `
     <label class="checkbox" for="${todo.id}">
     <input type="checkbox" id="${todo.id}">
@@ -190,6 +191,7 @@ footer.addEventListener("click", event => {
   }
 });
 
+// Show all todos
 function all() {
   todoItems.forEach(el => {
     if (el.hidden == true) {
@@ -199,6 +201,7 @@ function all() {
   });
 }
 
+// Show active todos
 function active() {
   todoItems.forEach(el => {
     if (el.checked == true) {
@@ -210,11 +213,11 @@ function active() {
   });
 }
 
+// Show completed todos
 function completed() {
   todoItems.forEach(el => {
     if (el.checked == true) {
       el.hidden = false;
-
     } else {
       el.hidden = true;
     }
@@ -222,6 +225,7 @@ function completed() {
   });
 }
 
+// Clear completed todos
 function clear() {
   todoItems.forEach(el => {
     if (el.checked == true) {
